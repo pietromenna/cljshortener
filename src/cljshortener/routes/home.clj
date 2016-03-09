@@ -3,7 +3,7 @@
             [cljshortener.views.layout :as layout]
             [hiccup.form :refer :all]))
 
-(defn home []
+(defn home [& longurl]
   (layout/common
     [:h1 "Welcome!"]
 
@@ -12,5 +12,11 @@
       (text-field "longurl")
       (submit-button "submit!"))))
 
+(defn register-long [longurl]
+  (do
+    (println longurl)
+    (home)))
+
 (defroutes home-routes
-  (GET "/" [] (home)))
+  (GET "/" [] (home))
+  (POST "/" [longurl] (register-long longurl)))
