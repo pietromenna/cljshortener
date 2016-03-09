@@ -4,6 +4,6 @@
 (defn common [& body]
   (html5
     [:head
-     [:title "Welcome to cljshortener"]
+     [:title "URL Shortener"]
      (include-css "/css/screen.css")]
     [:body body]))
