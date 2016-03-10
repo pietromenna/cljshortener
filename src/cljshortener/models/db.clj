@@ -21,3 +21,10 @@
       :links
       [:shorturl :longurl]
       [shorturl longurl])))
+
+(defn read-longurl-for [shorturl]
+  (sql/with-connection
+    db
+    (sql/with-query-results res
+      ["SELECT longurl FROM links WHERE shorturl = ?" shorturl ]
+      (first res))))
