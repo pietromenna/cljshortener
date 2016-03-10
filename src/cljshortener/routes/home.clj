@@ -1,21 +1,28 @@
 (ns cljshortener.routes.home
   (:require [compojure.core :refer :all]
             [cljshortener.views.layout :as layout]
-            [hiccup.form :refer :all]))
+            [hiccup.form :refer :all]
+            [cljshortener.models.db :as db]
+            [digest :as digest]))
 
-(defn home [& longurl]
+(defn home [& message]
   (layout/common
     [:h1 "Welcome!"]
+
+    [:p message]
 
     (form-to [:post "/"]
       [:p "Insert Long URL here:"]
       (text-field "longurl")
       (submit-button "submit!"))))
 
+(defn shorturl-for [longurl]
+  (clojure.string/join  (take 5 (digest/md5 longurl))))
+
 (defn register-long [longurl]
   (do
-    (println longurl)
-    (home)))
+    (db/save-link (shorturl-for longurl) longurl)
+    (home (str "Created shorthand for " longurl " as " (shorturl-for longurl)))))
 
 (defroutes home-routes
   (GET "/" [] (home))
