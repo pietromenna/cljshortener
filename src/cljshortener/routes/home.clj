@@ -21,9 +21,10 @@
   (clojure.string/join  (take 5 (digest/md5 longurl))))
 
 (defn register-long [longurl]
-  (do
-    (db/save-link (shorturl-for longurl) longurl)
-    (home (str "Created shorthand for " longurl " as " (shorturl-for longurl)))))
+  (let [shorturl (shorturl-for longurl)]
+    (do
+      (db/save-link shorturl longurl)
+      (home (str "Created shorthand for " longurl " as " shorturl)))))
 
 (defn redirect-using [shorturl]
   (response/redirect ((db/read-longurl-for shorturl) :longurl)))
